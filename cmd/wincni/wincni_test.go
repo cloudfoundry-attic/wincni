@@ -25,6 +25,7 @@ var _ = Describe("wincni", func() {
 				CNIVersion: "0.3.1",
 				Type:       "wincni",
 			},
+			Bytes: []byte(`{"cniVersion": "0.3.1"}`),
 		}
 
 		runtimeConf = &libcni.RuntimeConf{}
