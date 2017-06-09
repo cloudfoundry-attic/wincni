@@ -1,1 +1,1 @@
-# wincni
+#Windows CNI plugin
