@@ -7,3 +7,9 @@
 [submodule "vendor/github.com/containernetworking/cni"]
 	path = vendor/github.com/containernetworking/cni
 	url = https://github.com/containernetworking/cni
+[submodule "vendor/golang.org/x/net"]
+	path = vendor/golang.org/x/net
+	url = https://go.googlesource.com/net
+[submodule "vendor/gopkg.in/yaml.v2"]
+	path = vendor/gopkg.in/yaml.v2
+	url = https://gopkg.in/yaml.v2
