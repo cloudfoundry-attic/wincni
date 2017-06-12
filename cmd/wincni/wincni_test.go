@@ -4,6 +4,8 @@ import (
 	"path/filepath"
 
 	"github.com/containernetworking/cni/libcni"
+	"github.com/containernetworking/cni/pkg/types"
+	"github.com/containernetworking/cni/pkg/types/020"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
@@ -15,6 +17,7 @@ var _ = Describe("wincni", func() {
 		runtimeConf   *libcni.RuntimeConf
 		err           error
 		confJSON      string
+		result        types.Result
 	)
 
 	JustBeforeEach(func() {
@@ -42,10 +45,19 @@ var _ = Describe("wincni", func() {
 }`
 		})
 
-		It("returns successfully", func() {
-			result, err := CNIConfig.AddNetwork(networkConfig, runtimeConf)
+		It("writes the CNI version", func() {
+			result, err = CNIConfig.AddNetwork(networkConfig, runtimeConf)
 			Expect(err).To(BeNil())
-			Expect(result).NotTo(BeNil())
+			Expect(result.Version()).To(Equal("0.3.1"))
+		})
+
+		It("is convertable to 0.2.0 and includes the container IP address", func() {
+			result, err = CNIConfig.AddNetwork(networkConfig, runtimeConf)
+			result020, err := result.GetAsVersion("0.2.0")
+			Expect(err).To(BeNil())
+
+			containerIP := result020.(*types020.Result).IP4.IP.IP
+			Expect(containerIP).NotTo(BeNil())
 		})
 	})
 
