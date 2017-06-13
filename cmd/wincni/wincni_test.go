@@ -5,7 +5,7 @@ import (
 
 	"github.com/containernetworking/cni/libcni"
 	"github.com/containernetworking/cni/pkg/types"
-	"github.com/containernetworking/cni/pkg/types/020"
+	"github.com/containernetworking/cni/pkg/types/current"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
@@ -51,13 +51,12 @@ var _ = Describe("wincni", func() {
 			Expect(result.Version()).To(Equal("0.3.1"))
 		})
 
-		It("is convertable to 0.2.0 and includes the container IP address", func() {
+		It("has at least one IP address", func() {
 			result, err = CNIConfig.AddNetwork(networkConfig, runtimeConf)
-			result020, err := result.GetAsVersion("0.2.0")
 			Expect(err).To(BeNil())
 
-			containerIP := result020.(*types020.Result).IP4.IP.IP
-			Expect(containerIP).NotTo(BeNil())
+			resultCurrent := result.(*current.Result)
+			Expect(len(resultCurrent.IPs)).To(BeNumerically(">", 0))
 		})
 	})
 
